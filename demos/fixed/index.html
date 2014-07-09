@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Blockly Demo: Fixed Blockly</title>
-  <script type="text/javascript" src="../../blockly_compressed.js"></script>
+  <script type="text/javascript" src="../../blockly_uncompressed.js"></script>
   <script type="text/javascript" src="../../blocks_compressed.js"></script>
   <script type="text/javascript" src="../../msg/js/en.js"></script>
   <style>
@@ -28,6 +28,11 @@
   <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
 
   <xml id="toolbox" style="display: none">
+    <block type="lists_create_with_typed"></block>
+    <block type="logic_ternary_typed"></block>
+    <block type="logic_compare_typed"></block>
+    <block type="math_number_typed"></block>
+
     <block type="controls_if"></block>
     <block type="logic_compare"></block>
     <block type="controls_repeat_ext"></block>
