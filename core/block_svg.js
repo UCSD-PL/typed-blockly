@@ -123,13 +123,11 @@ Blockly.BlockSvg.INLINE_PADDING_Y = 5;
  * @const
  */
 Blockly.BlockSvg.MIN_BLOCK_Y = 25;
-//Blockly.BlockSvg.MIN_BLOCK_Y = 35;
 /**
  * Height of horizontal puzzle tab.
  * @const
  */
 Blockly.BlockSvg.TAB_HEIGHT = 20;
-//Blockly.BlockSvg.TAB_HEIGHT = 30;
 /**
  * Width of horizontal puzzle tab.
  * @const
@@ -223,6 +221,77 @@ Blockly.BlockSvg.typeVarShapes_ = {
       return [0];
     }
   },
+
+  pair : {
+    down: function (self, steps, updown) {
+      steps.push('l 0,3 -12,0 0,3 12,0');
+      Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+      steps.push('l -5,3 5,3');
+      Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+      steps.push('l -12,0 0,3 12,0 0,3');
+    },
+    up: function (self, steps, updown) {
+      steps.push('l 0,-3 -12,0 0,-3 12,0');
+      Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+      steps.push('l -5,-3 5,-3');
+      Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+      steps.push('l -12,0 0,-3 12,0 0,-3');
+    },
+    height: function(self) {
+      return Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 
+             Blockly.BlockSvg.getTypeExprHeight(self.children[1]) + 
+             18;
+    },
+    offsetsY: function(self) {
+      return [6, Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 12];
+    }
+  },
+
+  fun : {
+    down: function (self, steps, updown) {
+      steps.push('l 0,3 -12,0 0,3 12,0');
+      Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+      steps.push('l 5,3 -5,3');
+      Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+      steps.push('l -12,0 0,3 12,0 0,3');
+    },
+    up: function (self, steps, updown) {
+      steps.push('l 0,-3 -12,0 0,-3 12,0');
+      Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+      steps.push('l 5,-3 -5,-3');
+      Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+      steps.push('l -12,0 0,-3 12,0 0,-3');
+    },
+    height: function(self) {
+      return Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 
+             Blockly.BlockSvg.getTypeExprHeight(self.children[1]) + 
+             18;
+    },
+    offsetsY: function(self) {
+      return [6, Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 12];
+    }
+  },
+
+  // fun : {
+  //   down: function (self, steps, updown) {
+  //     Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+  //     steps.push('l 5,3 -5,3');
+  //     Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+  //   },
+  //   up: function (self, steps, updown) {
+  //     Blockly.BlockSvg.renderTypeExpr(self.children[1], steps, updown);
+  //     steps.push('l 5,-3 -5,-3');
+  //     Blockly.BlockSvg.renderTypeExpr(self.children[0], steps, updown);
+  //   },
+  //   height: function(self) {
+  //     return Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 
+  //            Blockly.BlockSvg.getTypeExprHeight(self.children[1]) + 
+  //            6;
+  //   },
+  //   offsetsY: function(self) {
+  //     return [0, Blockly.BlockSvg.getTypeExprHeight(self.children[0]) + 6];
+  //   }
+  // },
 
   int : { 
     down: 'l 0,5 a 6,6,0,0,0,0,12 l 0,3',
@@ -1207,6 +1276,15 @@ Blockly.BlockSvg.prototype.renderDrawRight_ = function(steps, highlightSteps,
     steps.push('V', cursorY);
     if (Blockly.RTL) {
       highlightSteps.push('V', cursorY - 1);
+    }
+  }
+  // Sorin: adjust height to display output
+  if (this.block_.outputConnection) {
+    var out_height = Blockly.BlockSvg.getTypeExprHeight(this.block_.outputConnection.typeExpr);
+    var padding = out_height - cursorY;
+    if (padding > 0) {
+      cursorY += padding
+      steps.push('v', padding);
     }
   }
   return cursorY;
